@@ -127,7 +127,7 @@ class IMP:
         
         # 원근법 변환 : 직선의 성질만 유지가 되고, 선의 평행성은 유지가 되지 않는 변환
         mtrx = cv2.getPerspectiveTransform(src, dst)      # 변환행렬 구하기   
-        outimg = cv2.warpPerspective(self.img, mtrx, (1080,560)) # 변환행렬값을 적용한 최종 결과 이미지
+        outimg = cv2.warpPerspective(self.img, mtrx, (1080,560)) # 변환행렬값을 적용한 최종 결과 이미지, 1080 = width, 560 = height
         #cv2.imshow('out_image',outimg)
         #cv2.waitKey()
         #cv2.destroyAllWindows()

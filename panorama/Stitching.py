@@ -135,7 +135,7 @@ class IMP:
         src = np.array([ [p1x,p1y], [p2x,p2y], [p3x,p3y], [p4x,p4y]], dtype=np.float32)
         mtrx = cv2.getPerspectiveTransform(src, dst) #4개의 꼭짓점으로 정확한 원근 변환 행렬을 반환
         
-        outimg = cv2.warpPerspective(self.img, mtrx, (1080,560))
+        outimg = cv2.warpPerspective(self.img, mtrx, (1080,560)) # 변환행렬값을 적용한 최종 결과 이미지, 1080 = width, 560 = height
         #cv2.imshow('out_image',outimg)
         #cv2.waitKey()
         #cv2.destroyAllWindows()
@@ -156,7 +156,7 @@ class Stitcher:
         
     def stitch(self, images, ratio=0.75, reprojThresh=4.0):
 		# unpack the images
-        (imageB, imageA) = images
+        (imageB, imageA) = images # 이어 붙일게 imageA , 기존 것이 imageB
         
 		# if the cached homography matrix is None, then we need to
 		# apply keypoint matching to construct it
@@ -289,8 +289,8 @@ class Stitcher:
             
             curr_frame = IMP(frame)   
             curr_outimg = curr_frame.impTransformer() # 정사영으로 변환하기
-            curr_cropimg = curr_outimg[0:250, 0:1920] # 그중 위에 제대로 있는 부분만 사용
-            curr_cropimg = cv2.rotate(curr_cropimg, cv2.cv2.ROTATE_90_CLOCKWISE)
+            curr_cropimg = curr_outimg[0:250, 0:1920] # 그중 위에 제대로 있는 부분만 사용 # 이미지는 인덱스 초과해도 상관 없음
+            curr_cropimg = cv2.rotate(curr_cropimg, cv2.cv2.ROTATE_90_CLOCKWISE) # (1080,250)
             result.append(curr_cropimg)
                 
             i += 1
