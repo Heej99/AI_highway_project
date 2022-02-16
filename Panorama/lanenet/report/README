@@ -1,0 +1,84 @@
+[0. requirements]
+
+- 세팅 환경
+NVIDIA GeForce RTX 3090
+cuda 11.2 
+nvidia driver 470.103.01
+python 3.6
+tensorflow==2.5.0
+
+※ tensorflow 2점대를 쓰되, 1점대 코드를 사용하도록 옵션을 걸어줘야 함 ※
+	import tensorflow.compat.v1 as tf
+	tf.disable_v2_behavior()
+
+
+- 깔아야 할 패키지 정보
+glog==0.3.1
+loguru==0.2.5
+tqdm==4.28.1
+matplotlib==2.2.4
+opencv_contrib_python==4.2.0.32
+numpy==1.19.5  # original : 1.16.4
+scikit_learn==0.24.1
+tensorflow==2.5.0
+PyYAML==5.4.1
+
+[1. 경로설정 해줘야 하는 파일들 ]
+tusimple_lanenet.yaml, path.yaml
+makeTFHD.py , PerspectiveTransformer.py
+evaluate_lanenet_on_tusimple
+parse_config_utils
+
+
+[2. config]
+panorama_para_init : 정사 파라미터 생성에 필요한 초깃값 지정.
+path : 
+ - module import 경로 
+ - 각 model 돌릴 때 필요한 config path
+ - data 경로 등
+tusimple_lanenet.yaml : tuSimple dataset으로 학습시킨 lanenet 모델의 환경설정 부분
+
+
+[2. 학습 데이터셋 준비]
+※  NOT JSON / INPUT .jpg, .png , .tif ※
+
+- gt_binary_image = 차선 binary로 저장된 이미지 (차선 255, 배경 0) <- 2차원으로 만들것  ( 720,1280 )
+- gt_instance_image = 차선 instance로 저장된 이미지 (차선 20, 70, 120, 170) <- 2차원으로 만들것  (720,1280)
+- gt_image = 원본 이미지 (720,1280,3)
+
+=> make_tfrecord.ipnby 로 돌리면,알아서 train.txt, val.txt, test.txt 만들어짐 ( 비율 : 0.85, 0.1, 0.05 ) 
+- train.txt = train으로 쓸 이미지들 path 담은 txt (gt_binary_image, gt_instance_image,image)
+- val.txt = validation으로 쓸 이미지들 path 담은 txt(gt_binary_image, gt_instance_image,image)
+
+
+[3. 주요 파일 설명]
+- 학습 데이터 전처리
+image_processing.ipynb <- labeling한 학습용 데이터를 우리 코드에 맞게 변형함.
+make_tfrecord.ipynb <- 한번 tfrecord가 만들어지면, 다시 실행할 시 오류남.
+
+- 학습 및 평가
+evaluate_lanenet_on_tusimple.py : test dataset을 평가하는 코드
+tusimple_lanenet_single_gpu_trainner.py : dataset을 학습시키는 코드 ( single gpu 사용시 적용)
+  output : 학습시켜서 결과로 나온 가중치 5개 (마지막 에폭 기준) 
+
+- 파노라마 최종 생성 : make_panorama.ipnby
+Step1 : FHD 생성
+	- magicNum = 3.25 ( 가변 속도 고려에 사용된 magic num <- 정사영 됐을 시, 우리 픽셀에 맞춰서 고려)
+Step2 : lanedetection model 사용
+Step3 : 파노라마 생성
+	- PerspectiveTransformer.py 에서 정사영 파라미터에 사용되는 두점을 설정하는 방식 나옴. 
+
+- 파노라마 생성시 output
+   fhd : 동영상에서 프레임을 추출한 이미지 ( 1920 x 1080 ) 
+   npy : 각 프레임당 탐지한 차선의 pixcel point를 저장한 넘파이 배열
+   output_image : 위에서 찾은 npy 배열의 pixcel point로 직접 사진에 표시한 결과 이미지
+   tfhd : 정사영 시킨 프레임
+   result_panorama : 최종 파노라마 생성 결과물 
+
+   
+[4. transfer-learning] 
+tuSimple Dataset으로 학습 시킨 가중치 - data/weight/tusimple_lanenet.ckpt
+
+
+
+

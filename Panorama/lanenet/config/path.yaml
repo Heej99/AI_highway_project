@@ -1,0 +1,28 @@
+#### using absoulte path please ####
+
+# User-Defined Function PATH
+FUNC_PATH: ["/home/user/lanenet/data_process/","/home/user/lanenet","/home/user/lanenet/model/test_lanenet"]
+
+CONFIG_PATH: "/home/user/lanenet/config/tusimple_lanenet.yaml"
+
+# DATA UPPER PATH
+UPPER_PATH: &upper_path "/home/user/lanenet/data/"
+
+# RAW DATA 정보
+RAW_PATH: 
+    GPS: !join [*upper_path,"GH011044/GH011044_Hero6 Black-GPS5.csv"]
+    VIDEO: !join [*upper_path, "GH011044/GH011044.MP4"]
+
+# FINAL OUTPUT DATA PATH
+DATA_PATH:
+    WEIGHT_PATH: !join [*upper_path, "weight/tusimple_train_miou=0.7543.ckpt-904"]
+    FHD_DIR: !join [*upper_path, "GH011044/FHD"]
+    TFHD_DIR: !join [*upper_path, "GH011044/TFHD"]
+    NPY_DIR: !join [*upper_path, "GH011044/NPY"]
+    IMAGE_OUT_DIR: !join [*upper_path, "GH011044/OUTPUT_IMAGE"]
+    
+# RESULT PATH
+RESULT_PATH: "/home/user/lanenet/result_panorama/"
+
+
+

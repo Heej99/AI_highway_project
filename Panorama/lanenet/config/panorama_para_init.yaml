@@ -1,0 +1,22 @@
+## parameter initial value ##
+
+# PERSPECTIVE INITIAL POINT
+POINT: 
+    LEFT_UP: [412, 530]
+    LEFT_DOWN: [7, 685]
+    RIGHT_UP: [1010, 351]
+    RIGHT_DOWN: [1820, 640]
+# ROI 
+ROI:  
+    HEIGHT: [0,250]
+    WIDTH: [0,960]
+# LANE AREA
+LANE: 
+    LANE_1: 590  # LANE1이 속할 구간 0 ~ 590
+    LANE_2: 950  # LANE2가 속할 구간 590 ~ 950
+    LANE_3: 1250 # LANE3가 속할 구간 950 ~ 1250
+    LANE_4: 1600 # LANE4가 속할 구간 1250 ~ 1600
+# INVERSE PERSPECTIVE
+PERSPECTIVE: 
+    TOPHEIGHT: 545
+    START_Y : 545  # IPM 파라미터로 넣어줄 Y의 최소 좌표 값 <- 이 이상의 값에서 두점 선발.
